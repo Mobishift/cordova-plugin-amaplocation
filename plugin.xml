@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
  
-<plugin xmlns="http://www.phonegap.com/ns/plugins/1.0" id="com.mobishift.cordova.plugins.amap" version="0.1.0">
+<plugin xmlns="http://www.phonegap.com/ns/plugins/1.0" id="com.mobishift.cordova.plugins.amaplocation" version="0.1.0">
     <name>AMapLocation</name>
     <description>AMap Location Plugin for Phonegap</description>
     <license>MIT</license>
@@ -14,7 +14,7 @@
  
         <config-file target="res/xml/config.xml" parent="/*">
             <feature name="AMapLocation">
-                <param name="android-package" value="com.spout.phonegap.plugins.amaplocation.AMapLocation"/>
+                <param name="android-package" value="com.mobishift.cordova.plugins.amaplocation.AMapLocation"/>
             </feature>
         </config-file> 
         
