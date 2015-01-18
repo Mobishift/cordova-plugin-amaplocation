@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ 
+<plugin xmlns="http://www.phonegap.com/ns/plugins/1.0" id="com.mobishift.cordova.plugins.amap" version="0.1.0">
+    <name>AMapLocation</name>
+    <description>AMap Location Plugin for Phonegap</description>
+    <license>MIT</license>
+    <keywords>amap, location, cordova</keywords>
+ 
+    <!-- android -->
+    <platform name="android">
+        <js-module src="www/amaplocation.js" name="AMapLocation">
+            <clobbers target="window.amapLocation" />
+        </js-module>
+ 
+        <config-file target="res/xml/config.xml" parent="/*">
+            <feature name="AMapLocation">
+                <param name="android-package" value="com.spout.phonegap.plugins.amaplocation.AMapLocation"/>
+            </feature>
+        </config-file> 
+        
+        <config-file target="AndroidManifest.xml" parent="/*">
+            <uses-permission android:name="android.permission.INTERNET" />
+            <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+            <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+            <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+            <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+            <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+            <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+            <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+            <uses-permission android:name="android.permission.CHANGE_CONFIGURATION" />
+        </config-file>
+
+        <config-file target="AndroidManifest.xml" parent="/manifest/application">
+            <meta-data
+            android:name="com.amap.api.v2.apikey"
+            android:value="YOUR_API_KEY" />
+        </config-file>
+        
+        <source-file src="src/android/AMapLocation.java" target-dir="src/com/mobishift/cordova/plugins/amaplocation" />   
+        <source-file src="src/android/Android_Location_V1.3.1.jar" target-dir="libs" framework="true"/>      
+    </platform>         
+</plugin>
