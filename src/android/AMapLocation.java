@@ -49,7 +49,11 @@ public class AMapLocation extends CordovaPlugin {
             			}
                         callbackContext.success(jsonObj);
                     }else{
-                        callbackContext.error("failed");
+                        if(amapLocation != null){
+                            callbackContext.error(amapLocation.getAMapException().getErrorCode()+"");
+                        }else{
+                            callbackContext.error("failed");
+                        }
                     }
                 }
                 
