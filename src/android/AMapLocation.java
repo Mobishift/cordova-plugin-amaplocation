@@ -1,9 +1,6 @@
 package com.mobishift.cordova.plugins.amaplocation;
 
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.apache.cordova.CallbackContext;
 import org.apache.cordova.CordovaPlugin;
 import org.apache.cordova.PluginResult;
@@ -11,9 +8,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import android.util.Log;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.location.Location;
+import android.os.SystemClock;
+import android.widget.Toast;
 
 import com.amap.api.location.LocationManagerProxy;
 import com.amap.api.location.AMapLocationListener;
@@ -22,6 +24,9 @@ import com.amap.api.location.LocationProviderProxy;
 public class AMapLocation extends CordovaPlugin {
 
     private static final String GET_ACTION = "getCurrentPosition";
+    private static final String START_ACTION = "start";
+    private static final String STOP_ACTION = "stop";
+    private static final String READ_ACCTION = "read";
 
     @Override
     public boolean execute(String action, JSONArray args,
@@ -78,7 +83,47 @@ public class AMapLocation extends CordovaPlugin {
                 }
             });
             return true;
+        }else if (START_ACTION.equals(action)){
+            Toast.makeText(this.cordova.getActivity(), "start", Toast.LENGTH_SHORT).show();
+            start(callbackContext);
+            return true;
+        }else if (STOP_ACTION.equals(action)){
+            stop();
+            return true;
+        }else if (READ_ACCTION.equals(action)){
+            read(callbackContext);
+            return true;
         }
         return false;
+    }
+
+    private void start(CallbackContext callbackContext){
+        stop();
+
+        Intent intent = new Intent(this.cordova.getActivity(), LocationService.class);
+        PendingIntent pendingIntent = PendingIntent.getService(this.cordova.getActivity(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        long nowTime = SystemClock.elapsedRealtime();
+
+        AlarmManager alarmManager = (AlarmManager)this.cordova.getActivity().getSystemService(Context.ALARM_SERVICE);
+        alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME, nowTime, 10 * 1000, pendingIntent);
+        callbackContext.success();
+    }
+
+    private void stop(){
+        Intent intent = new Intent(this.cordova.getActivity(), LocationService.class);
+        PendingIntent pendingIntent = PendingIntent.getService(this.cordova.getActivity(), 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        AlarmManager alarmManager = (AlarmManager)this.cordova.getActivity().getSystemService(Context.ALARM_SERVICE);
+        alarmManager.cancel(pendingIntent);
+
+    }
+
+    private void read(CallbackContext callbackContext){
+        LocationPreferences locationPreferences = LocationPreferences.getLocationPreferences(cordova.getActivity());
+        JSONArray jsonArray = locationPreferences.getLocations();
+        PluginResult pluginResult = new PluginResult(PluginResult.Status.OK, jsonArray);
+        callbackContext.sendPluginResult(pluginResult);
+        locationPreferences.clearLocations();
     }
 }

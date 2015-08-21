@@ -34,9 +34,12 @@
             <meta-data
             android:name="com.amap.api.v2.apikey"
             android:value="YOUR_API_KEY" />
+            <service android:name="com.mobishift.cordova.plugins.amaplocation.LocationService" />
         </config-file>
         
-        <source-file src="src/android/AMapLocation.java" target-dir="src/com/mobishift/cordova/plugins/amaplocation" />   
+        <source-file src="src/android/AMapLocation.java" target-dir="src/com/mobishift/cordova/plugins/amaplocation" />
+        <source-file src="src/android/LocationService.java" target-dir="src/com/mobishift/cordova/plugins/amaplocation" />
+        <source-file src="src/android/LocationPreferences.java" target-dir="src/com/mobishift/cordova/plugins/amaplocation" />
         <source-file src="src/android/Android_Location_V1.3.1.jar" target-dir="libs" framework="true"/>      
     </platform>         
 </plugin>
