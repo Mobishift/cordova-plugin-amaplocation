@@ -15,19 +15,21 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.location.Location;
 import android.os.SystemClock;
-import android.widget.Toast;
+import android.util.Log;
 
 import com.amap.api.location.LocationManagerProxy;
 import com.amap.api.location.AMapLocationListener;
 import com.amap.api.location.LocationProviderProxy;
 
 public class AMapLocation extends CordovaPlugin {
-
+    private static final String TAG = "AMapLocation";
     private static final String GET_ACTION = "getCurrentPosition";
     private static final String START_ACTION = "start";
     private static final String STOP_ACTION = "stop";
     private static final String READ_ACCTION = "read";
+    private static final int INTERVAL = 60 * 60;
 
+    private int interval = INTERVAL;
     @Override
     public boolean execute(String action, JSONArray args,
             final CallbackContext callbackContext) {
@@ -84,7 +86,19 @@ public class AMapLocation extends CordovaPlugin {
             });
             return true;
         }else if (START_ACTION.equals(action)){
-            Toast.makeText(this.cordova.getActivity(), "start", Toast.LENGTH_SHORT).show();
+            if(args.length() > 0){
+                try{
+                    JSONObject jsonObject = args.getJSONObject(0);
+                    if(jsonObject.has("maxLength")){
+                        LocationPreferences.maxLength = jsonObject.getInt("maxLength");
+                    }
+                    if(jsonObject.has("interval")){
+                        this.interval = jsonObject.getInt("interval");
+                    }
+                }catch (JSONException ex){
+                    Log.e(TAG, ex.getMessage());
+                }
+            }
             start(callbackContext);
             return true;
         }else if (STOP_ACTION.equals(action)){
@@ -106,7 +120,7 @@ public class AMapLocation extends CordovaPlugin {
         long nowTime = SystemClock.elapsedRealtime();
 
         AlarmManager alarmManager = (AlarmManager)this.cordova.getActivity().getSystemService(Context.ALARM_SERVICE);
-        alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME, nowTime, 10 * 1000, pendingIntent);
+        alarmManager.setRepeating(AlarmManager.ELAPSED_REALTIME, nowTime, interval* 1000, pendingIntent);
         callbackContext.success();
     }
 

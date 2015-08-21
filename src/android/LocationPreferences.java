@@ -6,6 +6,7 @@ import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -24,7 +25,8 @@ public class LocationPreferences {
 
     private SharedPreferences sharedPreferences;
 
-    public static boolean isBackground = false;
+    public static boolean inBackground = false;
+    public static int maxLength = MAX_LENGTH;
 
     private LocationPreferences(Context context){
         sharedPreferences = context.getSharedPreferences(PREFERENCE_NAME, 0);
@@ -66,10 +68,10 @@ public class LocationPreferences {
         JSONArray result;
 
         LocationObject locationObject = new LocationObject(aMapLocation.getLatitude(), aMapLocation.getLongitude());
-        array.put(locationObject);
-        if(array.length() > MAX_LENGTH){
+        array.put(locationObject.getJsonString());
+        if(array.length() > maxLength){
             result = new JSONArray();
-            for(int i = 1; i < array.length(); i++){
+            for(int i = array.length() - maxLength; i < array.length(); i++){
                 try{
                     result.put(array.get(i));
                 }catch (JSONException ex){
@@ -87,15 +89,29 @@ public class LocationPreferences {
         private double latitude;
         private double longitude;
         private String createdAt;
-        private boolean isBackground;
+        private boolean inBackground;
 
         public LocationObject(double latitude, double longitude) {
             this.latitude = latitude;
             this.longitude = longitude;
-            this.isBackground = LocationPreferences.isBackground;
+            this.inBackground = LocationPreferences.inBackground;
             Date date = Calendar.getInstance().getTime();
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.CHINA);
             createdAt = simpleDateFormat.format(date);
+        }
+
+        public String getJsonString(){
+            JSONObject jsonObject = new JSONObject();
+            try{
+                jsonObject.put("latitude", this.latitude);
+                jsonObject.put("longitude", this.longitude);
+                jsonObject.put("createdAt", this.createdAt);
+                jsonObject.put("inBackground", this.inBackground);
+            }catch (JSONException ex){
+                Log.e(TAG, ex.getMessage());
+            }
+
+            return jsonObject.toString();
         }
     }
 }

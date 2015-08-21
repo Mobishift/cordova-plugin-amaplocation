@@ -1,45 +1,46 @@
-<?xml version="1.0" encoding="UTF-8"?>
- 
-<plugin xmlns="http://www.phonegap.com/ns/plugins/1.0" id="com.mobishift.cordova.plugins.amaplocation" version="0.1.0">
-    <name>AMapLocation</name>
-    <description>AMap Location Plugin for Phonegap</description>
-    <license>MIT</license>
-    <keywords>amap, location, cordova</keywords>
- 
-    <!-- android -->
-    <platform name="android">
-        <js-module src="www/amaplocation.js" name="AMapLocation">
-            <clobbers target="window.amapLocation" />
-        </js-module>
- 
-        <config-file target="res/xml/config.xml" parent="/*">
-            <feature name="AMapLocation">
-                <param name="android-package" value="com.mobishift.cordova.plugins.amaplocation.AMapLocation"/>
-            </feature>
-        </config-file> 
-        
-        <config-file target="AndroidManifest.xml" parent="/*">
-            <uses-permission android:name="android.permission.INTERNET" />
-            <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-            <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-            <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-            <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-            <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-            <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
-            <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-            <uses-permission android:name="android.permission.CHANGE_CONFIGURATION" />
-        </config-file>
-
-        <config-file target="AndroidManifest.xml" parent="/manifest/application">
-            <meta-data
-            android:name="com.amap.api.v2.apikey"
-            android:value="YOUR_API_KEY" />
-            <service android:name="com.mobishift.cordova.plugins.amaplocation.LocationService" />
-        </config-file>
-        
-        <source-file src="src/android/AMapLocation.java" target-dir="src/com/mobishift/cordova/plugins/amaplocation" />
-        <source-file src="src/android/LocationService.java" target-dir="src/com/mobishift/cordova/plugins/amaplocation" />
-        <source-file src="src/android/LocationPreferences.java" target-dir="src/com/mobishift/cordova/plugins/amaplocation" />
-        <source-file src="src/android/Android_Location_V1.3.1.jar" target-dir="libs" framework="true"/>      
-    </platform>         
-</plugin>
+<?xml version='1.0' encoding='utf-8'?>
+	<plugin id="com.mobishift.cordova.plugins.amaplocation" version="0.1.0" xmlns="http://www.phonegap.com/ns/plugins/1.0">
+		<name>AMapLocation</name>
+		<description>AMap Location Plugin for Phonegap</description>
+		<license>MIT</license>
+		<keywords>amap, location, cordova</keywords>
+		<platform name="android">
+			<hook src="hook/before_android_install.js" type="before_plugin_install"/>
+			<hook src="hook/before_android_uninstall.js" type="before_plugin_uninstall"/>
+			<js-module name="AMapLocation" src="www/amaplocation.js">
+				<clobbers target="window.amapLocation" />
+			</js-module>
+			<config-file parent="/*" target="res/xml/config.xml">
+				<feature name="AMapLocation">
+					<param name="android-package" value="com.mobishift.cordova.plugins.amaplocation.AMapLocation" />
+				</feature>
+			</config-file>
+			<config-file parent="/*" target="AndroidManifest.xml">
+				<uses-permission android:name="android.permission.INTERNET" />
+				<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+				<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+				<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+				<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+				<uses-permission android:name="android.permission.READ_PHONE_STATE" />
+				<uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+				<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+				<uses-permission android:name="android.permission.CHANGE_CONFIGURATION" />
+			</config-file>
+			<config-file parent="/manifest/application" target="AndroidManifest.xml">
+				<meta-data android:name="com.amap.api.v2.apikey" android:value="YOUR_API_KEY" />
+				<service android:name="com.mobishift.cordova.plugins.amaplocation.LocationService" />
+			</config-file>
+			<source-file src="src/android/AMapLocation.java" target-dir="src/com/mobishift/cordova/plugins/amaplocation" />
+			<source-file src="src/android/LocationService.java" target-dir="src/com/mobishift/cordova/plugins/amaplocation" />
+			<source-file src="src/android/LocationPreferences.java" target-dir="src/com/mobishift/cordova/plugins/amaplocation" />
+			<source-file framework="true" src="src/android/Android_Location_V1.3.1.jar" target-dir="libs" />
+		</platform>
+		<platform name="ios">
+			<config-file parent="/*" target="config.xml">
+				<feature name="AMapLocation">
+					<param name="ios-package" value="AMapLocation" />
+				</feature>
+			</config-file>
+			<source-file src="src/ios/AMapLocation.m" />
+		</platform>
+	</plugin>

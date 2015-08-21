@@ -6,7 +6,6 @@ import android.location.Location;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
-import android.widget.Toast;
 
 import com.amap.api.location.*;
 import com.amap.api.location.AMapLocation;
@@ -28,7 +27,6 @@ public class LocationService extends Service implements AMapLocationListener{
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         locationManagerProxy = LocationManagerProxy.getInstance(this);
-        Toast.makeText(this, "request location data", Toast.LENGTH_SHORT).show();
         locationManagerProxy.requestLocationData(LocationProviderProxy.AMapNetwork, -1, 15, this);
         return START_NOT_STICKY;
     }
