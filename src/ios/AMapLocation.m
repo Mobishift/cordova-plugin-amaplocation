@@ -17,10 +17,10 @@ static NSString* const LONGITUDE_KEY = @"longitude";
 static NSString* const CREATED_AT_KEY = @"createdAt";
 static NSString* const IN_BACKGROUND_KEY = @"inBackground";
 static NSString* const MAX_LENGTH_KEY = @"maxLength";
-static NSString* const MAX_DISTANCE_KEY = @"distance";
+static NSString* const INTERVAL_KEY = @"interval";
 
-static int const MAX_DISTANCE = 100.0f;
 static int const MAX_LENGTH = 30;
+static int const INTERVAL = 60 * 60;
 @interface AMapLocation : CDVPlugin <CLLocationManagerDelegate>{
     // Member variables go here.
     CLLocationManager* locationManager;
@@ -28,7 +28,7 @@ static int const MAX_LENGTH = 30;
     BOOL isStart;
     NSString* callbackId;
     int maxLength;
-    int maxDistance;
+    int interval;
 }
 
 - (void)getCurrentPosition:(CDVInvokedUrlCommand*)command;
@@ -60,23 +60,22 @@ static int const MAX_LENGTH = 30;
 }
 
 - (void)start:(CDVInvokedUrlCommand *)command{
-    if(locationManager == nil){
-        [self initLocationManager];
-    }
     maxLength = MAX_LENGTH;
-    maxDistance = MAX_DISTANCE;
+    interval = INTERVAL;
     NSDictionary* dictionary = (NSDictionary*)[command.arguments objectAtIndex:0];
     if(dictionary != nil){
         if([dictionary objectForKey:MAX_LENGTH_KEY] != nil){
             NSNumber* number = (NSNumber*)[dictionary objectForKey:MAX_LENGTH_KEY];
             maxLength = [number intValue];
         }
-        if([dictionary objectForKey:MAX_DISTANCE_KEY] != nil){
-            NSNumber* number = (NSNumber*)[dictionary objectForKey:MAX_DISTANCE_KEY];
-            maxDistance = [number floatValue];
+        if([dictionary objectForKey:INTERVAL_KEY] != nil){
+            NSNumber* number = (NSNumber*)[dictionary objectForKey:INTERVAL_KEY];
+            interval = [number intValue];
         }
     }
-    
+    if(locationManager == nil){
+        [self initLocationManager];
+    }
     isStart = YES;
     [locationManager startUpdatingLocation];
 }
@@ -104,16 +103,15 @@ static int const MAX_LENGTH = 30;
 
             [self.commandDelegate sendPluginResult:pluginResult callbackId:callbackId];
             callbackId = nil;
-            [manager stopUpdatingLocation];
         }
     }else{
         //        NSLog(@"lat:%f,lng:%f", gcjLocation.latitude, gcjLocation.longitude);
         if(isStart){
             [self putLocation:gcjLocation];
-        }else{
-            [locationManager stopUpdatingLocation];
+            [NSTimer scheduledTimerWithTimeInterval:interval target:self selector:@selector(worker) userInfo:nil repeats:NO];
         }
     }
+    [manager stopUpdatingLocation];
         
 //        if(callbackId != nil){
 //            CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:[NSDictionary dictionaryWithObjectsAndKeys: [NSNumber numberWithDouble: gcjLocation.longitude], LONGITUDE_KEY, [NSNumber numberWithDouble: gcjLocation.latitude], LATITUDE_KEY, nil]];
@@ -123,10 +121,17 @@ static int const MAX_LENGTH = 30;
 //        }
 }
 
+- (void)worker{
+    if(isStart){
+        [locationManager startUpdatingLocation];
+    }
+}
+    
+
 - (void)initLocationManager{
     locationManager = [[CLLocationManager alloc] init];
     locationManager.delegate = self;
-    locationManager.distanceFilter = maxDistance; //更新距离
+    locationManager.distanceFilter = kCLDistanceFilterNone; //更新距离
     locationManager.desiredAccuracy = kCLLocationAccuracyBest;
     if([[[UIDevice currentDevice] systemVersion ] floatValue] >= 8.0){
         [locationManager requestWhenInUseAuthorization];
