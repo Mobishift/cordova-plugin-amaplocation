@@ -27,7 +27,7 @@
 				<uses-permission android:name="android.permission.CHANGE_CONFIGURATION" />
 			</config-file>
 			<config-file parent="/manifest/application" target="AndroidManifest.xml">
-				<meta-data android:name="com.amap.api.v2.apikey" android:value="{{AMAP_KEY}}" />
+				<meta-data android:name="com.amap.api.v2.apikey" android:value="YOUR_API_KEY" />
 				<service android:name="com.mobishift.cordova.plugins.amaplocation.LocationService" />
 			</config-file>
 			<source-file src="src/android/AMapLocation.java" target-dir="src/com/mobishift/cordova/plugins/amaplocation" />
