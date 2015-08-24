@@ -73,7 +73,7 @@ static int const MAX_LENGTH = 30;
         }
         if([dictionary objectForKey:MAX_DISTANCE_KEY] != nil){
             NSNumber* number = (NSNumber*)[dictionary objectForKey:MAX_DISTANCE_KEY];
-            maxLength = [number floatValue];
+            maxDistance = [number floatValue];
         }
     }
     
