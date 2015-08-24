@@ -10,7 +10,6 @@
 		<platform name="android">
 			<hook src="hook/before_android_install.js" type="before_plugin_install"/>
 			<hook src="hook/before_android_uninstall.js" type="before_plugin_uninstall"/>
-			
 			<config-file parent="/*" target="res/xml/config.xml">
 				<feature name="AMapLocation">
 					<param name="android-package" value="com.mobishift.cordova.plugins.amaplocation.AMapLocation" />
@@ -28,7 +27,7 @@
 				<uses-permission android:name="android.permission.CHANGE_CONFIGURATION" />
 			</config-file>
 			<config-file parent="/manifest/application" target="AndroidManifest.xml">
-				<meta-data android:name="com.amap.api.v2.apikey" android:value="1b0828247c0345417b618b92f93b0f7b" />
+				<meta-data android:name="com.amap.api.v2.apikey" android:value="{{AMAP_KEY}}" />
 				<service android:name="com.mobishift.cordova.plugins.amaplocation.LocationService" />
 			</config-file>
 			<source-file src="src/android/AMapLocation.java" target-dir="src/com/mobishift/cordova/plugins/amaplocation" />
