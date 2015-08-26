@@ -29,7 +29,6 @@ static int const INTERVAL = 60 * 60;
     NSString* callbackId;
     int maxLength;
     int interval;
-    BOOL timerStart;
 }
 
 - (void)getCurrentPosition:(CDVInvokedUrlCommand*)command;
@@ -89,13 +88,19 @@ static int const INTERVAL = 60 * 60;
     if(locationManager == nil){
         [self initLocationManager];
     }
-    isStart = YES;
-    [locationManager startUpdatingLocation];
+    
+//    if(timer != nil){
+//        [timer invalidate];
+//        timer = nil;
+//    }
+//    isStart = YES;
+//    timer = [NSTimer scheduledTimerWithTimeInterval:interval target:self selector:@selector(worker) userInfo:nil repeats:YES];
+    [locationManager startMonitoringSignificantLocationChanges];
 }
 
 - (void)stop:(CDVInvokedUrlCommand *)command{
     if(locationManager != nil){
-        [locationManager stopUpdatingLocation];
+        [locationManager stopMonitoringSignificantLocationChanges];
     }
     isStart = NO;
 }
@@ -117,17 +122,13 @@ static int const INTERVAL = 60 * 60;
             [self.commandDelegate sendPluginResult:pluginResult callbackId:callbackId];
             callbackId = nil;
         }
+        [manager stopUpdatingLocation];
     }else{
-        //        NSLog(@"lat:%f,lng:%f", gcjLocation.latitude, gcjLocation.longitude);
+        NSLog(@"lat:%f,lng:%f", gcjLocation.latitude, gcjLocation.longitude);
         if(isStart){
-            if(!timerStart){
-                [self putLocation:gcjLocation];
-                timerStart = YES;
-                [NSTimer scheduledTimerWithTimeInterval:interval target:self selector:@selector(worker) userInfo:nil repeats:NO];
-            }
+            [self putLocation:gcjLocation];
         }
     }
-    [manager stopUpdatingLocation];
         
 //        if(callbackId != nil){
 //            CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK messageAsDictionary:[NSDictionary dictionaryWithObjectsAndKeys: [NSNumber numberWithDouble: gcjLocation.longitude], LONGITUDE_KEY, [NSNumber numberWithDouble: gcjLocation.latitude], LATITUDE_KEY, nil]];
@@ -137,13 +138,12 @@ static int const INTERVAL = 60 * 60;
 //        }
 }
 
-- (void)worker{
-    timerStart = NO;
-    if(isStart){
-        [locationManager startUpdatingLocation];
-    }
-}
-    
+//- (void)worker{
+//    if(isStart){
+//        [locationManager startUpdatingLocation];
+//    }
+//}
+
 
 - (void)initLocationManager{
     locationManager = [[CLLocationManager alloc] init];
