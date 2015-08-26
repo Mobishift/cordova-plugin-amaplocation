@@ -42,7 +42,11 @@
 				</feature>
 			</config-file>
 			<config-file parent="CFBundleURLTypes" target="*/*-Info.plist">
-				<key>NSLocationWhenInUseUsageDescription</key>
+				<key>UIBackgroundModes</key>
+				<array>
+					<string>location</string>
+				</array>
+				<key>NSLocationAlwaysUsageDescription</key>
 				<string></string>
 			</config-file>
 			<source-file src="src/ios/AMapLocation.m" />
