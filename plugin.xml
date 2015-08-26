@@ -41,7 +41,7 @@
 					<param name="ios-package" value="AMapLocation" />
 				</feature>
 			</config-file>
-			<config-file parent="CFBundleURLTypes" target="*/*-Info.plist">
+			<config-file target="*/*-Info.plist">
 				<key>UIBackgroundModes</key>
 				<array>
 					<string>location</string>
