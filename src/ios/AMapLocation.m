@@ -51,9 +51,15 @@ static int const INTERVAL = 60 * 60;
         curLocationManager.desiredAccuracy = kCLLocationAccuracyBest;
         curLocationManager.delegate = self;
         if([[[UIDevice currentDevice] systemVersion ] floatValue] >= 8.0){
-            [curLocationManager requestWhenInUseAuthorization];
+            [curLocationManager requestAlwaysAuthorization];
         }
 
+    }
+    
+    if(![CLLocationManager locationServicesEnabled]){
+        CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"定位服务未打开"];
+        [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+        return;
     }
     
     [curLocationManager startUpdatingLocation];
