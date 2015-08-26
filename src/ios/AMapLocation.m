@@ -29,6 +29,7 @@ static int const INTERVAL = 60 * 60;
     NSString* callbackId;
     int maxLength;
     int interval;
+    BOOL timerStart;
 }
 
 - (void)getCurrentPosition:(CDVInvokedUrlCommand*)command;
@@ -120,7 +121,10 @@ static int const INTERVAL = 60 * 60;
         //        NSLog(@"lat:%f,lng:%f", gcjLocation.latitude, gcjLocation.longitude);
         if(isStart){
             [self putLocation:gcjLocation];
-            [NSTimer scheduledTimerWithTimeInterval:interval target:self selector:@selector(worker) userInfo:nil repeats:NO];
+            if(timerStart){
+                timerStart = YES;
+                [NSTimer scheduledTimerWithTimeInterval:interval target:self selector:@selector(worker) userInfo:nil repeats:NO];
+            }
         }
     }
     [manager stopUpdatingLocation];
@@ -134,6 +138,7 @@ static int const INTERVAL = 60 * 60;
 }
 
 - (void)worker{
+    timerStart = NO;
     if(isStart){
         [locationManager startUpdatingLocation];
     }
