@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-	<plugin id="com.mobishift.cordova.plugins.amaplocation" version="0.2.1" xmlns="http://www.phonegap.com/ns/plugins/1.0">
+	<plugin id="com.mobishift.cordova.plugins.amaplocation" version="0.2.2" xmlns="http://www.phonegap.com/ns/plugins/1.0">
 		<name>AMapLocation</name>
 		<description>AMap Location Plugin for Phonegap</description>
 		<license>MIT</license>
@@ -40,11 +40,6 @@
 				<feature name="AMapLocation">
 					<param name="ios-package" value="AMapLocation" />
 				</feature>
-			</config-file>
-			<config-file target="*/*-Info.plist" parent="UIBackgroundModes">
-				<array>
-					<string>location</string>
-				</array>
 			</config-file>
 			<config-file target="*/*-Info.plist" parent="NSLocationAlwaysUsageDescription">
 				<string></string>
