@@ -120,8 +120,8 @@ static int const INTERVAL = 60 * 60;
     }else{
         //        NSLog(@"lat:%f,lng:%f", gcjLocation.latitude, gcjLocation.longitude);
         if(isStart){
-            [self putLocation:gcjLocation];
             if(!timerStart){
+                [self putLocation:gcjLocation];
                 timerStart = YES;
                 [NSTimer scheduledTimerWithTimeInterval:interval target:self selector:@selector(worker) userInfo:nil repeats:NO];
             }
