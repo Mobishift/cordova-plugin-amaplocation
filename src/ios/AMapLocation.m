@@ -50,7 +50,7 @@ static int const INTERVAL = 60 * 60;
         curLocationManager.distanceFilter = kCLDistanceFilterNone;
         curLocationManager.desiredAccuracy = kCLLocationAccuracyBest;
         curLocationManager.delegate = self;
-        if([[[UIDevice currentDevice] systemVersion ] floatValue] >= 8.0){
+        if([CLLocationManager authorizationStatus] == kCLAuthorizationStatusNotDetermined && [[[UIDevice currentDevice] systemVersion ] floatValue] >= 8.0){
             [curLocationManager requestAlwaysAuthorization];
         }
 
@@ -58,6 +58,12 @@ static int const INTERVAL = 60 * 60;
     
     if(![CLLocationManager locationServicesEnabled]){
         CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"定位服务未打开"];
+        [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+        return;
+    }
+    
+    if([CLLocationManager authorizationStatus] != kCLAuthorizationStatusAuthorizedAlways && [CLLocationManager authorizationStatus] != kCLAuthorizationStatusAuthorizedWhenInUse){
+        CDVPluginResult* pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_ERROR messageAsString:@"请在设置中允许乐停车使用定位服务"];
         [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
         return;
     }
