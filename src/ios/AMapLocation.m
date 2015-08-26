@@ -134,7 +134,7 @@ static int const INTERVAL = 60 * 60;
     locationManager.distanceFilter = kCLDistanceFilterNone; //更新距离
     locationManager.desiredAccuracy = kCLLocationAccuracyBest;
     if([[[UIDevice currentDevice] systemVersion ] floatValue] >= 8.0){
-        [locationManager requestWhenInUseAuthorization];
+        [locationManager requestAlwaysAuthorization];
     }
 }
 
