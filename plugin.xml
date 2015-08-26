@@ -41,6 +41,11 @@
 					<param name="ios-package" value="AMapLocation" />
 				</feature>
 			</config-file>
+			<config-file target="*/*-Info.plist" parent="UIBackgroundModes">
+				<array>
+					<string>location</string>
+				</array>
+			</config-file>
 			<config-file target="*/*-Info.plist" parent="NSLocationAlwaysUsageDescription">
 				<string></string>
 			</config-file>
