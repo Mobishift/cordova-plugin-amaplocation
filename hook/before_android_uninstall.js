@@ -14,8 +14,8 @@ module.exports = function(context){
 	var content = fs.readFileSync(targetFile, {encoding: 'utf8'});
 	if(content.indexOf('com.mobishift.cordova.plugins.amaplocation.LocationPreferences') >= 0){
 		content = content.replace('\nimport com.mobishift.cordova.plugins.amaplocation.LocationPreferences;', '')
-				.replace('\nLocationPreferences.inBackground = true;')
-				.replace('\nLocationPreferences.inBackground = false;')
+				.replace('\nLocationPreferences.inBackground = true;', '')
+				.replace('\nLocationPreferences.inBackground = false;', '');
 		
 		fs.writeFileSync(targetFile, content);
 	}
