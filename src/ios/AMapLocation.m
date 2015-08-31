@@ -93,7 +93,7 @@ static int const INTERVAL = 60 * 60;
 //        [timer invalidate];
 //        timer = nil;
 //    }
-//    isStart = YES;
+    isStart = YES;
 //    timer = [NSTimer scheduledTimerWithTimeInterval:interval target:self selector:@selector(worker) userInfo:nil repeats:YES];
     [locationManager startMonitoringSignificantLocationChanges];
 }
