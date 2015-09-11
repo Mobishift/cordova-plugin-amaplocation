@@ -47,7 +47,7 @@
 				</array>
 			</config-file>
 			<config-file target="*/*-Info.plist" parent="NSLocationAlwaysUsageDescription">
-				<string></string>
+				<string>为了确保在您自己的停车场正确使用本应用，请选择允许</string>
 			</config-file>
 			<source-file src="src/ios/AMapLocation.m" />
 		</platform>
